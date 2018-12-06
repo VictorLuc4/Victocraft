@@ -130,13 +130,24 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="Gwm-7n-hpe"/>
                                 </constraints>
+                                <connections>
+                                    <action selector="slideValueChanged:" destination="ec3-MB-c2v" eventType="valueChanged" id="NFf-2f-F4L"/>
+                                </connections>
                             </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dcj-Tw-pjp">
+                                <rect key="frame" x="182.5" y="295" width="10" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Wtg-tA-VV6" firstAttribute="top" secondItem="wAk-Gz-I97" secondAttribute="top" constant="24" id="1yh-c2-dtI"/>
+                            <constraint firstItem="Dcj-Tw-pjp" firstAttribute="centerX" secondItem="EnM-Nf-HBU" secondAttribute="centerX" id="IbW-f8-bCd"/>
                             <constraint firstItem="3As-Pf-Rrk" firstAttribute="centerX" secondItem="EnM-Nf-HBU" secondAttribute="centerX" id="K5j-fh-F8l"/>
                             <constraint firstItem="MAB-kq-iLZ" firstAttribute="centerX" secondItem="EnM-Nf-HBU" secondAttribute="centerX" id="fTk-bV-TWW"/>
+                            <constraint firstItem="Dcj-Tw-pjp" firstAttribute="top" secondItem="3As-Pf-Rrk" secondAttribute="bottom" constant="24" id="qME-Qz-4G2"/>
                             <constraint firstItem="3As-Pf-Rrk" firstAttribute="top" secondItem="MAB-kq-iLZ" secondAttribute="bottom" constant="12" id="spK-N1-k9U"/>
                             <constraint firstItem="Wtg-tA-VV6" firstAttribute="centerX" secondItem="EnM-Nf-HBU" secondAttribute="centerX" id="tyI-EB-a41"/>
                             <constraint firstItem="MAB-kq-iLZ" firstAttribute="top" secondItem="Wtg-tA-VV6" secondAttribute="bottom" constant="36" id="w18-T2-oFg"/>
@@ -147,6 +158,7 @@
                     <connections>
                         <outlet property="blockSizeBar" destination="3As-Pf-Rrk" id="Bba-QI-eRR"/>
                         <outlet property="logoImageView" destination="Wtg-tA-VV6" id="46k-J8-g7X"/>
+                        <outlet property="numberLabel" destination="Dcj-Tw-pjp" id="Kzk-oX-kLk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EAL-rO-0MQ" userLabel="First Responder" sceneMemberID="firstResponder"/>

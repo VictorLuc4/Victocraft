@@ -16,6 +16,7 @@ class OptionsVC: UIViewController {
 
     @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var blockSizeBar: UISlider!
+    @IBOutlet weak var numberLabel: UILabel!
     
     var delegate:OptionsVCDelegate?
     var size:Float = 0
@@ -32,6 +33,9 @@ class OptionsVC: UIViewController {
         super.viewWillDisappear(animated)
     }
 
+    @IBAction func slideValueChanged(_ sender: Any) {
+        self.numberLabel.text = String(format: "%.1f", self.blockSizeBar.value * 10)
+    }
     /*
     // MARK: - Navigation
 

@@ -10,24 +10,6 @@ import UIKit
 import SceneKit
 import ARKit
 
-enum Block {
-    case dirt
-    case sand
-    case stone
-    case brick
-    case bookshelf
-    case bedrock
-    case cobblestone_mossy
-    case daylight_detector_bottom
-    case frosted_ice
-    case mushroom_block_skin_red
-    case purpur_pillar_top
-    case quartz_block_chiseled_top
-    case redstone_lamp_on
-    case slime
-    case sponge
-}
-
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
@@ -35,6 +17,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var optionsButton: UIButton!
     
     var blockSize:CGFloat = 0.2
+    var iBlock:UIImage!
     
     var blocksImages:[UIImage] = [UIImage(named:"dirt")!,
                                   UIImage(named:"sand")!,
@@ -51,8 +34,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                                   UIImage(named:"redstone_lamp_on")!,
                                   UIImage(named:"slime")!,
                                   UIImage(named:"sponge")!,]
-    var block:Block = .dirt
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +43,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = false
         
         self.addTapGestureToSceneView()
+        
+        let tapGesture = UIPanGestureRecognizer(target: self, action: #selector(self.didTape(withGestureRecognizer:)))
+        sceneView.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,6 +69,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    @objc func didTape(withGestureRecognizer recognizer: UIPanGestureRecognizer) {
+        let tapLocation = recognizer.location(in: sceneView)
+        let hitTestResults = sceneView.hitTest(tapLocation)
+        
+        guard let node = hitTestResults.first?.node else {
+            let hitTestResultsWithFeaturePoints = sceneView.hitTest(tapLocation, types: .featurePoint)
+            
+            if let hitTestResultWithFeaturePoints = hitTestResultsWithFeaturePoints.first {
+                let translation = hitTestResultWithFeaturePoints.worldTransform.translation
+                addBox(x: translation.x, y: translation.y, z: translation.z)
+            }
+            return
+            
+        }
+        
+        if recognizer.state == .changed {
+            let hitTestResultsWithFeaturePoints = sceneView.hitTest(tapLocation, types: .featurePoint)
+            
+            if let hitTestResultWithFeaturePoints = hitTestResultsWithFeaturePoints.first {
+                let translation = hitTestResultWithFeaturePoints.worldTransform.translation
+                node.position = SCNVector3(x: translation.x, y: translation.y, z: translation.z)
+            }
+        }
+    }
+    
     @objc func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
         let tapLocation = recognizer.location(in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation)
@@ -106,40 +115,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         print(self.blockSize)
         let box = SCNBox(width: self.blockSize, height: self.blockSize, length: self.blockSize, chamferRadius: 0)
         let material = SCNMaterial()
-        var image:UIImage!
-        switch self.block {
-        case .dirt:
-            image = self.blocksImages[0]
-        case .sand:
-            image = self.blocksImages[1]
-        case .stone:
-            image = self.blocksImages[2]
-        case .brick:
-            image = self.blocksImages[3]
-        case .bookshelf:
-            image = self.blocksImages[4]
-        case .bedrock:
-            image = self.blocksImages[5]
-        case .cobblestone_mossy:
-            image = self.blocksImages[6]
-        case .daylight_detector_bottom:
-            image = self.blocksImages[7]
-        case .frosted_ice:
-            image = self.blocksImages[8]
-        case .mushroom_block_skin_red:
-            image = self.blocksImages[9]
-        case .purpur_pillar_top:
-            image = self.blocksImages[10]
-        case .quartz_block_chiseled_top:
-            image = self.blocksImages[11]
-        case .redstone_lamp_on:
-            image = self.blocksImages[12]
-        case .slime:
-            image = self.blocksImages[13]
-        case .sponge:
-            image = self.blocksImages[14]
-        }
-        material.diffuse.contents = image
+        material.diffuse.contents = self.iBlock
         box.materials = [material]
         let boxNode = SCNNode()
         boxNode.geometry = box
@@ -196,44 +172,22 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath) as! BlockCell
         
         cell.imageView.image = self.blocksImages[indexPath.row]
+        cell.layer.borderColor = UIColor(red: 0, green: 1, blue: 0, alpha: 0.2).cgColor
+        cell.layer.borderWidth = 0
         
         return cell
         
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if indexPath.row == 0 {
-            self.block = .dirt
-        } else if indexPath.row == 1 {
-            self.block = .sand
-        } else if indexPath.row == 2 {
-            self.block = .stone
-        } else if indexPath.row == 3 {
-            self.block = .brick
-        } else if indexPath.row == 4 {
-            self.block = .bookshelf
-        }else if indexPath.row == 5 {
-            self.block = .bedrock
-        }else if indexPath.row == 6 {
-            self.block = .cobblestone_mossy
-        }else if indexPath.row == 7 {
-            self.block = .daylight_detector_bottom
-        }else if indexPath.row == 8 {
-            self.block = .frosted_ice
-        }else if indexPath.row == 9 {
-            self.block = .mushroom_block_skin_red
-        }else if indexPath.row == 10 {
-            self.block = .purpur_pillar_top
-        }else if indexPath.row == 11 {
-            self.block = .quartz_block_chiseled_top
-        }else if indexPath.row == 12 {
-            self.block = .redstone_lamp_on
-        }else if indexPath.row == 13 {
-            self.block = .slime
-        }else if indexPath.row == 14 {
-            self.block = .sponge
-        }
+        self.iBlock = self.blocksImages[indexPath.row]
+        let cell = self.collectionView.cellForItem(at: indexPath)
+        cell?.layer.borderWidth = 50
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = self.collectionView.cellForItem(at: indexPath)
+        cell?.layer.borderWidth = 0
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
